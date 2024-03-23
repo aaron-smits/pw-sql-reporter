@@ -1,10 +1,10 @@
 {
   "name": "pw-sql-reporter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "custom reporter for playwright to write results to a SQL database",
-  "main": "reporter.js",
-  "types": "reporter.d.ts",
+  "main": "dist/reporter.js",
+  "types": "dist/reporter.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
