@@ -93,7 +93,7 @@ export class TursoDB implements Database {
             );
         `)
     }
-    async createTestRun(): Promise<Number> {
+    async createTestRun(): Promise<number> {
         const results = await this.client.execute({
             sql: `
               INSERT INTO test_runs (status, start_time)
@@ -118,8 +118,9 @@ export class TursoDB implements Database {
         })
     }
     async updateTest(test: TestCase, result: TestResult): Promise<void> {
-        if (!this.runId) {
-            throw new Error("Test run not created")
+        if (this.runId === undefined) {
+            const runId = await this.createTestRun()
+            this.runId = Number(runId)
         }
         await this.client.execute({
             sql: `
@@ -160,7 +161,7 @@ export class TursoDB implements Database {
 export interface Database {
   dropTables(): Promise<void>
   createTables(): Promise<void>
-  createTestRun(): Promise<Number>
+  createTestRun(): Promise<number>
   createTest(test: TestCase): Promise<void>
   updateTest(test: TestCase, result: TestResult): Promise<void>
   updateTestRun(result: FullResult): Promise<void>
