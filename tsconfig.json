@@ -4,9 +4,12 @@
         "module": "CommonJS",
         "outDir": "./dist",
         "sourceMap": true,
-        "strict": true,
         "esModuleInterop": true,
+        "strict": true,
         "declaration": true,
+        "noEmit": true,
+        "noImplicitOverride": true,
+        "skipLibCheck": true,
     },
     "include": [
         "src/**/*"
