@@ -4,7 +4,8 @@ import type {
     TestResult,
     Reporter
 } from "@playwright/test/reporter"
-import { Database, TursoDB } from "./database"
+import { TursoDB } from "./database/turso"
+import { Database } from "./database/database-interface"
 
 export default class SqlReporter implements Reporter {
     private db: Database

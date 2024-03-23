@@ -3,8 +3,6 @@
   "version": "1.0.8",
   "type": "module",
   "description": "custom reporter for playwright to write results to a SQL database",
-  "main": "dist/sql-reporter.js",
-  "types": "dist/reporter.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
