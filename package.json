@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "publish": "tsc && npm publish --allow-same-version"
+    "patch": "tsc && npm version patch && npm publish",
   },
   "repository": {
     "type": "git",
