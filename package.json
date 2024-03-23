@@ -1,7 +1,7 @@
 {
   "name": "pw-sql-reporter",
   "version": "1.0.3",
-  "type": "commonjs",
+  "type": "module",
   "description": "custom reporter for playwright to write results to a SQL database",
   "main": "dist/reporter.js",
   "types": "dist/reporter.d.ts",
