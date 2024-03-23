@@ -39,7 +39,7 @@ export default class SqlReporter implements Reporter {
 
 export class TursoDB implements Database {
     readonly client: Client
-    private runId: number | undefined
+    runId: number | undefined
     constructor() {
         this.client = createClient({
             url: "libsql://" + process.env.TURSO_URL,
@@ -109,7 +109,8 @@ export class TursoDB implements Database {
     }
 
     async createTest(test: TestCase): Promise<void> {
-        if (!this.runId) {
+        if (this.runId === undefined) {
+            console.log(this.runId)
             throw new Error("Test run not created")
         }
         await this.client.execute({
