@@ -1,6 +1,6 @@
 {
   "name": "pw-sql-reporter",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "type": "module",
   "description": "custom reporter for playwright to write results to a SQL database",
   "main": "dist/sql-reporter.js",
