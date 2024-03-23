@@ -1,12 +1,9 @@
+import { createClient, Client } from "@libsql/client"
 import type {
     FullResult,
     TestCase,
     TestResult
 } from "@playwright/test/reporter"
-import { createClient, Client } from "@libsql/client"
-import * as dotenv from "dotenv"
-dotenv.config()
-
 // Define the Database interface
 export interface Database {
     dropTables(): Promise<void>
@@ -20,7 +17,8 @@ export interface Database {
 // Implement the Database interface to connect to your database
 // In this example, we are using Turso
 // https://www.turso.dev/docs/getting-started
-export default class TursoDB implements Database {
+
+export class TursoDB implements Database {
     readonly client: Client
     private runId: number | undefined
     constructor() {

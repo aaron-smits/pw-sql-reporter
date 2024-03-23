@@ -1,11 +1,10 @@
 import type {
     FullResult,
-    Reporter,
     TestCase,
-    TestResult
+    TestResult,
+    Reporter
 } from "@playwright/test/reporter"
-import type { Database } from "./database"
-import TursoDB from "./database"
+import { Database, TursoDB } from "./database"
 
 export default class SqlReporter implements Reporter {
     private db: Database
@@ -33,3 +32,4 @@ export default class SqlReporter implements Reporter {
         await this.db.updateTestRun(result)
     }
 }
+
