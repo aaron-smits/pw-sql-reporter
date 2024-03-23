@@ -2,9 +2,37 @@ import { createClient, Client } from "@libsql/client"
 import type {
     FullResult,
     TestCase,
-    TestResult
+    TestResult,
+    Reporter
 } from "@playwright/test/reporter"
-import { Database } from "./database-interface"
+
+export default class SqlReporter implements Reporter {
+  private db: Database;
+  constructor(options: { db?: Database; dropTables?: boolean } = {}) {
+    this.db = options.db || new TursoDB();
+    if (options.dropTables) {
+      this.db.dropTables();
+    }
+  }
+  async onBegin() {
+    // await this.db.dropTables()
+    await this.db.createTables();
+    await this.db.createTestRun();
+  }
+
+  async onTestBegin(test: TestCase) {
+    await this.db.createTest(test);
+  }
+
+  async onTestEnd(test: TestCase, result: TestResult) {
+    await this.db.updateTest(test, result);
+  }
+
+  async onEnd(result: FullResult) {
+    await this.db.updateTestRun(result);
+  }
+}
+
 // Implement the Database interface to connect to your database
 // In this example, we are using Turso
 // https://www.turso.dev/docs/getting-started
@@ -129,4 +157,14 @@ export class TursoDB implements Database {
             args: [result.status, new Date().toISOString(), this.runId]
         })
     }
+}
+
+// Define the Database interface
+export interface Database {
+  dropTables(): Promise<void>
+  createTables(): Promise<void>
+  createTestRun(): Promise<void>
+  createTest(test: TestCase): Promise<void>
+  updateTest(test: TestCase, result: TestResult): Promise<void>
+  updateTestRun(result: FullResult): Promise<void>
 }
