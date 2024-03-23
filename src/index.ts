@@ -143,8 +143,9 @@ export class TursoDB implements Database {
         })
     }
     async updateTestRun(result: FullResult): Promise<void> {
-        if (!this.runId) {
-            throw new Error("Test run not created")
+        if (this.runId === undefined) {
+            const runId = await this.createTestRun()
+            this.runId = Number(runId)
         }
         await this.client.execute({
             sql: `
