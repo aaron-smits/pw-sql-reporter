@@ -128,7 +128,7 @@ export class TursoDB implements Database {
         result.stdout ? result.stdout.toString() : "",
         result.stderr ? result.stderr.toString() : "",
         result.retry,
-        test.title,
+        test.id,
         this.runId!,
       ],
     });
