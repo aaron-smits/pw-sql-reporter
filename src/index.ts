@@ -16,12 +16,12 @@ export default class SqlReporter implements Reporter {
   }
   async onBegin() {
     // await this.db.dropTables()
-    await this.db.createTables();
-    await this.db.createTestRun();
+    await this.db.createTables()
+    await this.db.createTestRun()
   }
 
   async onTestBegin(test: TestCase) {
-    await this.db.createTest(test);
+    await this.db.createTest(test)
   }
 
   async onTestEnd(test: TestCase, result: TestResult) {
@@ -109,16 +109,12 @@ export class TursoDB implements Database {
     }
 
     async createTest(test: TestCase): Promise<void> {
-        if (this.runId === undefined) {
-            console.log(this.runId)
-            throw new Error("Test run not created")
-        }
         await this.client.execute({
             sql: `
                   INSERT INTO tests (run_id, title, history_id)
                   VALUES(?, ?, ?)
               `,
-            args: [this.runId, test.title, test.id]
+            args: [this.runId!, test.title, test.id]
         })
     }
     async updateTest(test: TestCase, result: TestResult): Promise<void> {
