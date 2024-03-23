@@ -17,7 +17,6 @@ export default class SqlReporter implements Reporter {
   async onBegin() {
     // await this.db.dropTables()
     await this.db.createTables()
-    await this.db.createTestRun()
   }
 
   async onTestBegin(test: TestCase) {
@@ -94,7 +93,7 @@ export class TursoDB implements Database {
             );
         `)
     }
-    async createTestRun(): Promise<void> {
+    async createTestRun(): Promise<Number> {
         const results = await this.client.execute({
             sql: `
               INSERT INTO test_runs (status, start_time)
@@ -102,19 +101,20 @@ export class TursoDB implements Database {
             `,
             args: [new Date().toISOString()]
         })
-        if (!results.lastInsertRowid) {
-            throw new Error("Failed to create test run")
-        }
-        this.runId = Number(results.lastInsertRowid)
+        return Number(results.lastInsertRowid)
     }
 
     async createTest(test: TestCase): Promise<void> {
+        if (this.runId === undefined) {
+            const runId = await this.createTestRun()
+            this.runId = Number(runId)
+        }
         await this.client.execute({
             sql: `
                   INSERT INTO tests (run_id, title, history_id)
                   VALUES(?, ?, ?)
               `,
-            args: [this.runId!, test.title, test.id]
+            args: [this.runId, test.title, test.id]
         })
     }
     async updateTest(test: TestCase, result: TestResult): Promise<void> {
@@ -160,7 +160,7 @@ export class TursoDB implements Database {
 export interface Database {
   dropTables(): Promise<void>
   createTables(): Promise<void>
-  createTestRun(): Promise<void>
+  createTestRun(): Promise<Number>
   createTest(test: TestCase): Promise<void>
   updateTest(test: TestCase, result: TestResult): Promise<void>
   updateTestRun(result: FullResult): Promise<void>
