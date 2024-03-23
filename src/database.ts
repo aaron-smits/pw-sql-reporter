@@ -1,6 +1,5 @@
 import type {
     FullResult,
-    Reporter,
     TestCase,
     TestResult
 } from "@playwright/test/reporter"
@@ -21,7 +20,7 @@ export interface Database {
 // Implement the Database interface to connect to your database
 // In this example, we are using Turso
 // https://www.turso.dev/docs/getting-started
-export class TursoDB implements Database {
+export default class TursoDB implements Database {
     readonly client: Client
     private runId: number | undefined
     constructor() {
@@ -140,32 +139,5 @@ export class TursoDB implements Database {
             `,
             args: [result.status, new Date().toISOString(), this.runId]
         })
-    }
-}
-
-export default class SqlReporter implements Reporter {
-    private db: Database
-    constructor(options: { db?: Database, dropTables?: boolean } = {}) {
-        this.db = options.db || new TursoDB()
-        if (options.dropTables) {
-            this.db.dropTables()
-        }
-    }
-    async onBegin() {
-        // await this.db.dropTables()
-        await this.db.createTables()
-        await this.db.createTestRun()
-    }
-
-    async onTestBegin(test: TestCase) {
-        await this.db.createTest(test)
-    }
-
-    async onTestEnd(test: TestCase, result: TestResult) {
-        await this.db.updateTest(test, result)
-    }
-
-    async onEnd(result: FullResult) {
-        await this.db.updateTestRun(result)
     }
 }
